@@ -10,16 +10,6 @@ from pprint import pprint
 from googleapiclient.discovery import build
 
 
-# Perform google search for given search term
-# Stolen from StackOverflow
-def google_search(search_term, **kwargs):
-	api_key = config.api_key
-	cse_id = config.cse_id
-    service = build("customsearch", "v1", developerKey=api_key)
-    result = service.cse().list(q="site:remywiki.com %s" % search_term, cx=cse_id, **kwargs).execute()
-    return result["items"]
-
-
 # Terminal output colors
 # Stolen from StackOverflow
 class bcolors:
@@ -148,6 +138,16 @@ def google_song_data(songname):
 		time.sleep(5)
 
 	return None
+
+
+# Perform google search for given search term
+# Stolen from StackOverflow
+def google_search(search_term, **kwargs):
+	api_key = config.api_key
+	cse_id = config.cse_id
+    service = build("customsearch", "v1", developerKey=api_key)
+    result = service.cse().list(q="site:remywiki.com %s" % search_term, cx=cse_id, **kwargs).execute()
+    return result["items"]
 
 
 # Make sure song page exists and has valid DDR data
