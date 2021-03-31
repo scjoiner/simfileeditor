@@ -1,1 +1,1 @@
-#Stepmania/Project Outfox simfile editor
+# Stepmania/Project Outfox simfile editor
