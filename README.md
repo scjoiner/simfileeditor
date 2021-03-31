@@ -18,10 +18,10 @@ For 1-20 scale conversion, the script will prioritize games on the remywiki whic
 
 # Usage
 ## Single simfile
-$ python3 ddredit.py [-m {modern | legacy}] [-d ...] -f simfile.sm
+`$ python3 ddredit.py [-m {modern | legacy}] [-d ...] -f simfile.sm`
 
 ## Directory of folders containing simfiles
-$ python3 ddredit.py [-m {modern | legacy}] [-d ...] -f simfiledirectory
+`$ python3 ddredit.py [-m {modern | legacy}] [-d ...] -f simfiledirectory`
 
 ## Manually specified difficulties
 Difficulties should be a comma-separated list. Any unused difficulties should be a "-" character. 
@@ -30,4 +30,4 @@ The order must be:
 `single-beginner, single-easy, single-medium, single-hard, single-challenge, double-easy, double-medium, double-hard, double-challenge`
 
 Example:
-$ python3 ddredit.py -d 1,3,5,7,9,3,5,7,9 -f simfile.sm
+`$ python3 ddredit.py -d 1,3,5,7,9,3,5,7,9 -f simfile.sm`
