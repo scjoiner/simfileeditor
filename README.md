@@ -14,7 +14,7 @@ For 1-20 scale conversion, the script will prioritize games on the remywiki whic
 # Requirements
 - python 3
 - pycurl library
-- Google API library
+- google-api-python-client library
 
 # Usage
 ## Single simfile
