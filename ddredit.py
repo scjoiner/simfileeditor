@@ -3,13 +3,25 @@ import os
 import sys
 import time
 import pycurl
+import config
 import argparse
 from io import BytesIO
 from pprint import pprint
-from googlesearch import search#, get_random_user_agent
+from googleapiclient.discovery import build
+
+
+# Perform google search for given search term
+# Stolen from StackOverflow
+def google_search(search_term, **kwargs):
+	api_key = config.api_key
+	cse_id = config.cse_id
+    service = build("customsearch", "v1", developerKey=api_key)
+    result = service.cse().list(q="site:remywiki.com %s" % search_term, cx=cse_id, **kwargs).execute()
+    return result["items"]
 
 
 # Terminal output colors
+# Stolen from StackOverflow
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -120,19 +132,20 @@ def get_legacy_difficulty(difficulty_dict):
 # Pull the page from remy wiki via direct URL or google
 def google_song_data(songname):	
 	try:
-		#user_agent = get_random_user_agent()
-		user_agent = {
-        			  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/61.0.3163.100 Safari/537.36'}
-		results = search("site:remywiki.com %s" % songname, num_results=20)
+
+		results = google_search(songname)
 		for result in results:
-			#print(result)
-			songpage = get_page_contents(result)
+			url = result["link"]
+			songpage = get_page_contents(url)
 			if is_valid_songpage(songpage):
-				print(bcolors.OKCYAN + "--> Found page for song: %s" % result + bcolors.ENDC)
+				print(bcolors.OKCYAN + "--> Found page for song: %s" % url + bcolors.ENDC)
 				return songpage
+
 	except Exception as e:
 		print(str(e))
+	# Sleep to avoid API overload
+	finally:
+		time.sleep(5)
 
 	return None
 
@@ -243,7 +256,6 @@ def get_difficulty_from_web(songname, mode):
 				current_game = line.partition("<td>")[2].partition("</td>")[0]
 				current_difficulties = []
 				# Don't allow data from ignored games
-				#if "DanceDanceRevolution" not in current_game:
 				for ignored_game in ignored_games:
 					if ignored_game in current_game:
 						current_game = ""
@@ -263,9 +275,6 @@ def get_difficulty_from_web(songname, mode):
 				# Stick completed game values into dict of all games
 				if current_game and len(current_difficulties) > 8 and (current_numeric_difficulties > 3 or has_originals is False):
 					difficulty_dict[current_game] = map_difficulties_to_dict(current_difficulties, current_chart)
-				# elif current_game and len(current_difficulties) > 8 and not has_originals:
-				# 	print("Challenge found: %s" % current_game)
-				# 	pprint(current_difficulties)
 
 				elif current_game and len(current_difficulties) > 8 and current_chart in songname:
 					special_chart = True
