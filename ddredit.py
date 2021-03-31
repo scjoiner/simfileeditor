@@ -108,6 +108,8 @@ def get_legacy_difficulty(difficulty_dict):
 	}
 	for game in difficulty_dict.keys():
 		for style in difficulty_dict[game].keys():
+			if "chart" in style:
+					continue
 			for difficulty in difficulty_dict[game][style]:
 				legacy_entry = legacy_difficulty[style][difficulty]
 				candidate_entry = difficulty_dict[game][style][difficulty]
@@ -145,9 +147,9 @@ def google_song_data(songname):
 def google_search(search_term, **kwargs):
 	api_key = config.api_key
 	cse_id = config.cse_id
-    service = build("customsearch", "v1", developerKey=api_key)
-    result = service.cse().list(q="site:remywiki.com %s" % search_term, cx=cse_id, **kwargs).execute()
-    return result["items"]
+	service = build("customsearch", "v1", developerKey=api_key)
+	result = service.cse().list(q="site:remywiki.com %s" % search_term, cx=cse_id, **kwargs).execute()
+	return result["items"]
 
 
 # Make sure song page exists and has valid DDR data
@@ -290,7 +292,7 @@ def get_difficulty_from_web(songname, mode):
 				difficulty_dict.pop(game, None)
 
 	# If we have a "present" chart we should use it
-	if present_chart:
+	if present_chart and mode == "modern":
 		temp_dict = difficulty_dict.copy()
 		print("--> Song has present chart")
 		for game in temp_dict.keys():
