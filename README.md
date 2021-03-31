@@ -31,3 +31,8 @@ The order must be:
 
 Example:
 `$ python3 ddredit.py -d 1,3,5,7,9,3,5,7,9 -f simfile.sm`
+
+# Screenshots
+
+![image](https://user-images.githubusercontent.com/4303855/113081785-4f3e9700-91a7-11eb-8674-5af422dcd187.png)
+
